@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { UserRouter } from "../modules/user/user.routes";
 import { PostRouter } from "../modules/post/post.routes";
+import { AuthRouter } from "../modules/auth/auth.rotues";
 
 export const router = Router();
 type TModuleRoute = {
@@ -16,6 +17,10 @@ const moduleRoutes: TModuleRoute = [
   {
     path: "/post",
     route: PostRouter,
+  },
+  {
+    path: "/auth",
+    route: AuthRouter,
   },
 ];
 
