@@ -24,7 +24,9 @@ const getAllPosts = async (
   limit: number,
   search?: string,
   isFeatured?: string,
-  tags?: string[]
+  tags?: string[],
+  sortBy?: string,
+  sortOrder?: string
 ) => {
   const skip = (page - 1) * limit;
   const where: any = {
@@ -44,6 +46,9 @@ const getAllPosts = async (
     where,
     skip,
     take: limit,
+    orderBy: {
+      [sortBy as string]: sortOrder,
+    },
     include: {
       author: {
         select: {
