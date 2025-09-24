@@ -76,21 +76,35 @@ const getAllPosts = async (
 };
 
 const getSinglePost = async (id: number) => {
-  const result = await prisma.post.findUniqueOrThrow({
-    where: {
-      id,
-    },
-    include: {
-      author: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          role: true,
+  const result = await prisma.$transaction(async (tx) => {
+    await tx.post.update({
+      where: {
+        id: id,
+      },
+      data: {
+        views: {
+          increment: 1,
         },
       },
-    },
+    });
+    const postdata = await tx.post.findUniqueOrThrow({
+      where: {
+        id,
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+          },
+        },
+      },
+    });
+    return postdata;
   });
+
   return result;
 };
 const updatePost = async (id: number, payload: Partial<Post>) => {
